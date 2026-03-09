@@ -1,0 +1,5 @@
+node_modules/
+dist/
+.expo/
+*.js.map
+.env.local

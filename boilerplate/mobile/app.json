@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "Arena IoT",
+    "slug": "arena-iot",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#111827",
+    "sdkVersion": "54.0.0",
+    "platforms": ["ios", "android"],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.fiap.arenaiot",
+      "infoPlist": {
+        "NSMotionUsageDescription": "Este app usa o giroscópio para navegar entre lutadores."
+      }
+    },
+    "android": {
+      "adaptiveIcon": { "backgroundColor": "#111827" },
+      "package": "com.fiap.arenaiot",
+      "permissions": [
+        "android.permission.ACTIVITY_RECOGNITION",
+        "android.permission.HIGH_SAMPLING_RATE_SENSORS"
+      ]
+    },
+    "extra": { "disableShakeWarning": true }
+  }
+}
