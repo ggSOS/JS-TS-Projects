@@ -62,3 +62,16 @@ O catálogo horizontal de personagens:
 ## Dados de teste
 
 Use um dos RMs do arquivo `backend/dados/alunosPermitidos.ts` para fazer login.
+
+## Body na rota Login:
+```JSON
+{
+    "nomeUsuario": "Paulo Reis",
+    "rm": "76729"
+}
+```
+- Inserir Token tipo Bearer em Authorization
+ou
+- No Header:
+  - Key             -   Value
+  - Authorization   -   Bearer 5ee836e8-c434-4b39-921a-4b95418636d4

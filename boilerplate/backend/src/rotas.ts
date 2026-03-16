@@ -3,29 +3,31 @@ import cors from "cors";
 import { randomUUID } from "crypto";
 import { ALUNOS_PERMITIDOS } from "./dados/alunosPermitidos";
 import { Equipe } from "./types";
-import { SessaoManager, authMiddleware } from "./middleware/auth";
+import {
+  SessaoManager,
+  authMiddleware,
+  AuthenticatedRequest,
+} from "./middleware/auth";
+import lutadoresJson from "../data/lutadores.json";
 
 export const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-/*
-  modelo de Body do Input:
-
-  {
-      "nomeUsuario": "Paulo Reis",
-      "rm": "76729"
-  }
-    */
 app.post("/api/login", (req, res) => {
   // checar dados completos
-  const nomeUsuario = req.body.nomeUsuario;
-  const rm = req.body.rm;
+  const { nomeUsuario, rm } = req.body;
   if (!nomeUsuario || !rm) {
     res.status(400).json({
       error: "nomeUsuario e rm são obrigatorios",
     });
+  }
+
+  // evitar login duplicado
+  const tokenExistente = SessaoManager.buscarPorRm(rm);
+  if (tokenExistente) {
+    SessaoManager.remover(tokenExistente);
   }
 
   // checar permissao
@@ -48,7 +50,7 @@ app.post("/api/login", (req, res) => {
   res.json({
     token,
     aluno: {
-      nomeUsuario,
+      nome: nomeUsuario.trim(),
       rm,
       equipe,
     },
@@ -57,36 +59,42 @@ app.post("/api/login", (req, res) => {
   res.status(501).json({ error: "Erro no Servidor" });
 });
 
-/*
-  No Header ou no Authorization:
+app.post("/api/logout", authMiddleware, (req: AuthenticatedRequest, res) => {
+  if (req.usuario) {
+    const tokenExistente = SessaoManager.buscarPorRm(req.usuario.rm || "");
 
-  Key             -   Value
-  Authorization   -   Bearer 5ee836e8-c434-4b39-921a-4b95418636d4
-*/
-app.get("/api/alunos", authMiddleware, (req, res) => {
+    if (tokenExistente) {
+      SessaoManager.remover(tokenExistente);
+    }
+  }
+  res.json({ message: "Logout realizado com sucesso" });
+
+  res.status(501).json({ error: "Erro no Servidor" });
+});
+
+app.get("/api/personagens", (_req, res) => {
+  res.json(lutadoresJson);
+
+  res.status(501).json({ error: "Erro no Servidor" });
+});
+
+app.get("/api/alunos", authMiddleware, (_req, res) => {
   const alunos = SessaoManager.listarTodos();
   res.json({
+    total: alunos.length,
     alunos,
-    totalAlunos: alunos,
   });
 
   res.status(501).json({ error: "Erro no Servidor" });
 });
 
-app.delete("/api/logout", authMiddleware, (req, res) => {
-  
-  res.status(204).send(SessaoManager.remover(req.usuario.rm)) // todo arrumar delete
-});
+app.get("/api/me", authMiddleware, (req: AuthenticatedRequest, res) => {
+  res.json({ aluno: req.usuario });
 
-// GET /api/me — Dados do aluno autenticado (protegida)
-// TODO: Adicionar authMiddleware como segundo argumento
-// TODO: Retornar (req as any).usuario
-app.get("/api/me", (req, res) => {
-  // Implementar aqui (não esquecer do authMiddleware!)
-  res.status(501).json({ error: "Não implementado" });
+  res.status(501).json({ error: "Erro no Servidor" });
 });
 
 // GET /health — Health check (pré-pronto)
-app.get("/health", (req, res) => {
+app.get("/health", (_req, res) => {
   res.json({ status: "ok", uptime: process.uptime() });
 });

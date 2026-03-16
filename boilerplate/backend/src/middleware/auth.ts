@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { Equipe, Sessao } from '../types';
 
+export interface AuthenticatedRequest extends Request {
+  usuario?: Sessao;
+}
+
 export class SessaoManager {
   private static sessoes = new Map<string, Sessao>();
 
@@ -32,9 +36,18 @@ export class SessaoManager {
     const { vermelho, azul } = this.contarPorEquipe();
     return vermelho <= azul ? Equipe.VERMELHO : Equipe.AZUL;
   }
+
+  static buscarPorRm(rm: string): string | undefined {
+    for (const [token, sessao] of this.sessoes) {
+      if (sessao.rm === rm) {
+        return token;
+      }
+    }
+    return undefined;
+  }
 }
 
-export function authMiddleware(req: Request, res: Response, next: NextFunction): void {
+export function authMiddleware(req: AuthenticatedRequest, res: Response, next: NextFunction): void {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -50,6 +63,6 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction):
     return;
   }
 
-  (req as any).usuario = usuario;
+  req.usuario = usuario;
   next();
 }

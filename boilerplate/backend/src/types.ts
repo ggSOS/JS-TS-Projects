@@ -8,3 +8,10 @@ export interface Sessao {
   nome: string;
   equipe: Equipe;
 }
+
+export interface Lutador {
+  id: string;
+  nome: string;
+  anime: string;
+  imagemUrl: string;
+}
