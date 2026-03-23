@@ -19,7 +19,7 @@ app.post("/api/login", (req, res) => {
   // checar dados completos
   const { nomeUsuario, rm } = req.body;
   if (!nomeUsuario || !rm) {
-    res.status(400).json({
+    return res.status(400).json({
       error: "nomeUsuario e rm são obrigatorios",
     });
   }

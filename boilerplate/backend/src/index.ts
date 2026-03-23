@@ -1,8 +1,8 @@
-import 'dotenv/config';
-import { createServer } from 'http';
-import { app } from './rotas';
+import "dotenv/config";
+import { createServer } from "http";
+import { app } from "./rotas";
 
-const PORTA = parseInt(process.env.PORTA_HTTP || '3000');
+const PORTA = Number.parseInt(process.env.PORTA_HTTP || "3000");
 const server = createServer(app);
 
 server.listen(PORTA, () => {

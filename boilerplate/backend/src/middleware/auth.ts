@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
-import { Equipe, Sessao } from '../types';
+import { Request, Response, NextFunction } from "express";
+import { Equipe, Sessao } from "../types";
 
 export interface AuthenticatedRequest extends Request {
   usuario?: Sessao;
@@ -27,8 +27,8 @@ export class SessaoManager {
   static contarPorEquipe(): { vermelho: number; azul: number } {
     const todas = this.listarTodos();
     return {
-      vermelho: todas.filter(s => s.equipe === Equipe.VERMELHO).length,
-      azul: todas.filter(s => s.equipe === Equipe.AZUL).length,
+      vermelho: todas.filter((s) => s.equipe === Equipe.VERMELHO).length,
+      azul: todas.filter((s) => s.equipe === Equipe.AZUL).length,
     };
   }
 
@@ -47,20 +47,26 @@ export class SessaoManager {
   }
 }
 
-export function authMiddleware(req: AuthenticatedRequest, res: Response, next: NextFunction): void {
+export function authMiddleware(
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction,
+): void {
   const authHeader = req.headers.authorization;
 
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    res.status(401).json({ error: 'Token não fornecido. Faça login primeiro.' });
-    return;
+  if (!authHeader?.startsWith("Bearer ")) {
+    return res.status(401).json({
+      error: "Token não fornecido. Faça login primeiro.",
+    });
   }
 
   const token = authHeader.slice(7);
   const usuario = SessaoManager.buscar(token);
 
   if (!usuario) {
-    res.status(401).json({ error: 'Token inválido ou expirado.' });
-    return;
+    return res.status(401).json({
+      error: "Token inválido ou expirado.",
+    });
   }
 
   req.usuario = usuario;
