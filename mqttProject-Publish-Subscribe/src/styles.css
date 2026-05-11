@@ -1,0 +1,119 @@
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #0f172a;
+  color: #f1f5f9;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+h1 { margin: 0 0 8px; font-size: 28px; }
+h2 { margin: 32px 0 16px; font-size: 20px; color: #94a3b8; }
+
+.status {
+  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  display: inline-block;
+  background: #1e293b;
+  margin-bottom: 24px;
+}
+.status.conectado { background: #166534; }
+.status.desconectado { background: #991b1b; }
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  border-radius: 12px;
+  padding: 20px;
+  transition: background-color 0.4s ease;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.card .topico {
+  font-size: 12px;
+  opacity: 0.8;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card .valor {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.card .historico {
+  font-size: 11px;
+  opacity: 0.75;
+  font-family: monospace;
+}
+
+.publisher {
+  background: #1e293b;
+  border-radius: 12px;
+  padding: 20px;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 2fr 2fr 1fr 1fr auto;
+  align-items: end;
+}
+
+.publisher label {
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  color: #94a3b8;
+  gap: 4px;
+}
+
+.publisher input,
+.publisher select {
+  background: #0f172a;
+  color: #f1f5f9;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.publisher .checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.publisher button {
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.publisher button:hover { background: #2563eb; }
+.publisher button:disabled { background: #475569; cursor: not-allowed; }
+
+.vazio {
+  background: #1e293b;
+  padding: 40px;
+  border-radius: 12px;
+  text-align: center;
+  color: #64748b;
+  font-size: 14px;
+}
